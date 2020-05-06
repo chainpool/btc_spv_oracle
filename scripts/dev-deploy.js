@@ -35,7 +35,7 @@ program
     .option('-r, --getResult', 'get game result')
     .option('-l, --getLottery', 'get game result')
     .option('-k, --key [PRIVATEKEY]', 'Set Private Key', '0xabf8e5bdbe30c65656c0a3cbd181ff8a56294a69dfedd27982aace4a76909115')
-    .option('-w, --wasm [WASM-PATH]', 'Path of the compiled wasm file', '../target/btc_predict_game.wasm')
+    .option('-w, --wasm [WASM-PATH]', 'Path of the compiled wasm file', '../target/btc_spv_oracle.wasm')
     .option('-a, --abi [ABI-PATH]', 'Path of the generated ABI file', '../target/metadata.json')
     .option('-W, --ws [WEBSOCKET]', 'Webscoket of the ChainX node', 'ws://127.0.0.1:8087')
     //.option('-W, --ws [WEBSOCKET]', 'Webscoket of the ChainX node', 'wss://testnet.w1.chainx.org.cn/ws')
@@ -139,8 +139,8 @@ async function uploadContract(chainx, wasm, gasLimit, Alice) {
         const isExist = await isCodeHashExist(chainx, codehash)
         if (isExist) {
             console.log('contract code Exist, do not need to upload')
-            reslove(codehash)
-            //reject(codehash)
+            //reslove(codehash)
+            reject(codehash)
             return
         }
         const args = [gasLimit, compactAddLength(wasm)]
