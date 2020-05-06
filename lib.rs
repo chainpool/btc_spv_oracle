@@ -166,12 +166,12 @@ mod btc_spv_oracle {
             result.unwrap().unwrap().into_iter().map(|x| x.into()).collect()
         }
 
-        #[ink(message)]
+         #[ink(message)]
         fn get_best_index(&self) -> H256Wrapper {
-            const BEST_INDEX: &[u8] = b"XBridgeOfBTC BtcMinDeposit";
+            const BEST_INDEX: &[u8] = b"XBridgeOfBTC BestIndex";
             let key = crypto::twox_128(BEST_INDEX);
-            let result = self.env().get_runtime_storage::<u64>(&key[..]);
-            result.unwrap().unwrap()
+            let result = self.env().get_runtime_storage::<H256>(&key[..]);
+            result.unwrap().unwrap().into()
         }
 
     }

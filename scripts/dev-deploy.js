@@ -329,7 +329,7 @@ async function init(chainx, alicePrikey) {
             console.log('contract address: ', contract_address)
 
         } else if (program.getBlock) {
-            const contract_address = '5HRCYwcHfmcLvc8JNUUi5oSf68J9pFEk37LTpqWQq4schgeK'
+            const contract_address = '5DT6b3hK3iMC3z18TxsG6onFZwk7qydUfrXCSAvCnsy6m4zJ'
             const method = 'get_btc_block_hash'
             params = [628811]
             let result = await queryDataOnChain(chainx, abi, contract_address, method, gasLimit, params, alicePrikey)
@@ -337,7 +337,7 @@ async function init(chainx, alicePrikey) {
             process.exit(0);
 
         } else if (program.getBest) {
-            const contract_address = '5FEnRDGSAA3pbcaozXZQbGd4CENpFjQc3nwGrfjtzbwHvkVq'
+            const contract_address = '5DT6b3hK3iMC3z18TxsG6onFZwk7qydUfrXCSAvCnsy6m4zJ'
             const method = 'get_best_index'
             params = []
             let result = await queryDataOnChain(chainx, abi, contract_address, method, gasLimit, params, alicePrikey)
