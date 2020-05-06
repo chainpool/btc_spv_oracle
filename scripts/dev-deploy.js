@@ -37,8 +37,8 @@ program
     .option('-k, --key [PRIVATEKEY]', 'Set Private Key', '0xabf8e5bdbe30c65656c0a3cbd181ff8a56294a69dfedd27982aace4a76909115')
     .option('-w, --wasm [WASM-PATH]', 'Path of the compiled wasm file', '../target/btc_spv_oracle.wasm')
     .option('-a, --abi [ABI-PATH]', 'Path of the generated ABI file', '../target/metadata.json')
-    .option('-W, --ws [WEBSOCKET]', 'Webscoket of the ChainX node', 'ws://127.0.0.1:8087')
-    //.option('-W, --ws [WEBSOCKET]', 'Webscoket of the ChainX node', 'wss://testnet.w1.chainx.org.cn/ws')
+    //.option('-W, --ws [WEBSOCKET]', 'Webscoket of the ChainX node', 'ws://127.0.0.1:8087')
+    .option('-W, --ws [WEBSOCKET]', 'Webscoket of the ChainX node', 'wss://testnet.w1.chainx.org.cn/ws')
     .parse(process.argv);
 
 /*
@@ -193,7 +193,7 @@ async function deploy(chainx, _abi, codeHash, params, endowment, gas, Alice) {
                     if (event) {
                         // event name "Instantiated", data[0] 为发送人地址，data[1] 为合约地址
                         const contract_address = event.event.data[1]
-                        console.log("instance erc20 contract success")
+                        console.log("instance contract success")
                         resolve(contract_address)
                     }
                 } else if ('ExtrinsicFailed' == response.events[i].method) {
