@@ -29,15 +29,6 @@ mod crypto {
         r
     }
 
-    // Do u32 to vec u8
-    pub fn transform_u32_to_array_of_u8(x: u32) -> [u8; 4] {
-        let b1: u8 = ((x >> 24) & 0xff) as u8;
-        let b2: u8 = ((x >> 16) & 0xff) as u8;
-        let b3: u8 = ((x >> 8) & 0xff) as u8;
-        let b4: u8 = (x & 0xff) as u8;
-        return [b1, b2, b3, b4];
-    }
-
      /// Do a Blake2 256-bit hash and place result in `dest`.
     pub fn blake2_256_into(data: &[u8], dest: &mut [u8; 32]) {
         dest.copy_from_slice(blake2_rfc::blake2b::blake2b(32, &[], data).as_bytes());
@@ -129,9 +120,8 @@ mod btc_spv_oracle {
         isBetSet: storage::Value<bool>,
         // This is used to set a new bet.
         currentBet: storage::Value<u32>,
-
-        owner: storage::Value<Account>,
-
+        value: storage::Value<u32>,
+        owner: storage::Value<AccountId>,
     }
 
 
@@ -158,23 +148,22 @@ mod btc_spv_oracle {
         /// Constructor that initializes the `bool` value to the given `init_value`.
         #[ink(constructor)]
         fn new(&mut self, init_value: bool) {
-            self.value.set(init_value);
+            self.value.set(0);
         }
 
         #[ink(message)]
-        fn get_init_data(&self, height: u32) -> bool {
+        fn get_init_data(&self, height: u32) -> u32 {
             *self.value
         }
 
         // Returns the block Hash
         #[ink(message)]
-        fn get_btc_block_hash(&self, height: u32) -> bool {
+        fn get_btc_block_hash(&self, height: u32) -> Vec<H256Wrapper> {
             let mut key =  b"XBridgeOfBTC BlockHashFor".to_vec();
-            let height_bytes = crypto::transform_u32_to_array_of_u8(height); 
-            Encode::encode_to(&height_bytes, &mut key);
-            let params = crypto::twox_128(&key);
+            Encode::encode_to(&height, &mut key);
+            let params = crypto::blake2_256(&key);
             let result = self.env().get_runtime_storage::<Vec<H256>>(&params[..]);
-            true
+            result.unwrap().unwrap().into_iter().map(|x| x.into()).collect()
         }
 
         #[ink(message)]
