@@ -167,14 +167,13 @@ mod btc_spv_oracle {
         }
 
         #[ink(message)]
-        fn get_best_index(&self) -> u64 {
+        fn get_best_index(&self) -> H256Wrapper {
             const BEST_INDEX: &[u8] = b"XBridgeOfBTC BtcMinDeposit";
             let key = crypto::twox_128(BEST_INDEX);
             let result = self.env().get_runtime_storage::<u64>(&key[..]);
             result.unwrap().unwrap()
         }
 
-    
     }
 
     /// Unit tests in Rust are normally defined within such a `#[cfg(test)]`
@@ -192,17 +191,23 @@ mod btc_spv_oracle {
             // above as `&mut self` functions that return nothing we can call
             // them in test code as if they were normal Rust constructors
             // that take no `self` argument but return `Self`.
-            let btc_spv_oracle = BtcSpvOracle::default();
-            assert_eq!(btc_spv_oracle.get(), false);
-        }
+            let btc_spv_oracle = BtcPredictGame::new(true);
+            let height: u32 = 628811;
 
-        /// We test a simple use case of our contract.
-        #[test]
-        fn it_works() {
-            let mut btc_spv_oracle = BtcSpvOracle::new(false);
-            assert_eq!(btc_spv_oracle.get(), false);
-            btc_spv_oracle.flip();
-            assert_eq!(btc_spv_oracle.get(), true);
+            let mut key = b"XBridgeOfBTC BlockHashFor".to_vec();
+            println!("parity_codec:{:?}", key);
+            Encode::encode_to(&height, &mut key);
+
+            let params = crypto::blake2_256(&key);
+
+            println!("parity_codec:{:?}", key);
+
+            println!("params:{:?}", params);
+            let result: Vec<H256> = btc_spv_oracle.get_btc_block_hash(height);
+
+            println!("hash:{:?}", result);
+
+            // assert_eq!(btc_spv_oracle.get_btc_block_hash(height), true);
         }
     }
 }

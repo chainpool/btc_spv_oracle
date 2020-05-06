@@ -331,7 +331,7 @@ async function init(chainx, alicePrikey) {
         } else if (program.getBlock) {
             const contract_address = '5HRCYwcHfmcLvc8JNUUi5oSf68J9pFEk37LTpqWQq4schgeK'
             const method = 'get_btc_block_hash'
-            params = [233]
+            params = [628811]
             let result = await queryDataOnChain(chainx, abi, contract_address, method, gasLimit, params, alicePrikey)
             console.log(result)
             process.exit(0);
